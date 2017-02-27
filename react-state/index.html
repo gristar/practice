@@ -2,9 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>react - state</title>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
+    <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
 </head>
 <body>
-
+<div id="exp"></div>
+<script type="text/babel">
+let Button = React.createClass({
+    getInitialState: function(){
+        return {liked: false}
+    },
+    handleClick: function(event){
+        this.setState({liked: !this.state.liked})
+    },
+    render: function() {
+        let txt = this.state.liked ? '喜欢' : '不喜欢';
+        return (
+            <p onClick={this.handleClick}>
+                你<b>{txt}</b>我，点击我切换状态。
+            </p>
+        )
+    }
+});
+    ReactDOM.render(
+        <Button/>
+        ,
+        document.getElementById('exp')
+    )
+</script>
 </body>
 </html>
