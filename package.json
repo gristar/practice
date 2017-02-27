@@ -1,0 +1,26 @@
+{
+  "name": "practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gristar/practice.git"
+  },
+  "author": "gristar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gristar/practice/issues"
+  },
+  "homepage": "https://github.com/gristar/practice#readme",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.23.0",
+    "babel-preset-env": "^1.1.10",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  }
+}
