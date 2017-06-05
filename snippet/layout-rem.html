@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>rem布局</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .root-wrap{
+            width: 13.34rem;
+            height: 7.5rem;
+            background: black;
+        }
+    </style>
+    <script>
+        (function(win,doc){
+            if(!win.addEventListener) return;
+            var html = doc.documentElement;
+            var setFont = function(){
+                var h = html.clientHeight,
+                    w = html.clientWidth;
+                html.style.fontSize = w > h ? w/1334 * 100 + 'px' : w/750 * 100 + 'px';
+            }
+            doc.addEventListener('DOMContentLoaded',setFont);
+            win.addEventListener('resize',setFont);
+            win.addEventListener('load',setFont);
+        })(window,document)
+    </script>
+</head>
+<body>
+    <div class="root-wrap"></div>
+</body>
+</html>
