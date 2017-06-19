@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>cookie</title>
+</head>
+<body>
+<div>
+    name:<input type="text" name="name">
+    value:<input type="text" name="value">
+    <button id="add">增加cookie</button>
+    <button id="clear">清除cookie</button>
+</div>
+<div id="show">
+
+</div>
+<script>
+    var setCookie = function(param){
+        if(!param || !param.name || !param.value || typeof document.cookie === 'undefined'){
+            return;
+        }
+        var cookie = param.name+'='+param.value;
+
+        if(param.maxAge){
+            cookie += ';max-age=' + param.maxAge;
+        }
+        document.cookie = cookie;
+        if(typeof param.callback === 'function'){
+            param.callback();
+        }
+    };
+    var clearCookie = function(callback){
+        var cookies = document.cookie.split(';');
+        for(var i = 0; i<cookies.length; i++){
+            document.cookie = cookies[i].split('=')[0] + '=' + cookies[i].split('=')[1] + ';max-age=0';
+        }
+        if(typeof callback === 'function'){
+            callback();
+        }
+    };
+
+    var show = document.getElementById('show'),
+        add = document.getElementById('add'),
+        clear = document.getElementById('clear');
+    add.addEventListener('click', function(){
+        var name = document.getElementsByName('name')[0],
+            value = document.getElementsByName('value')[0];
+        setCookie({
+            name: encodeURIComponent(name.value),
+            value: encodeURIComponent(value.value),
+            maxAge: new Date().getTime(),
+            callback: function(){
+                show.innerText = document.cookie;
+            }
+        })
+    });
+    clear.addEventListener('click', function(){
+        clearCookie(function(){
+            show.innerText = document.cookie;
+        });
+    })
+
+</script>
+</body>
+</html>
