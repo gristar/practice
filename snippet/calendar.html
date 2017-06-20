@@ -1,52 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <title>calendar</title>
     <style>
-        .cal{
+        .clear:after {
+            content: '';
+            clear: both;
+            display: block;
+            height: 0;
+        }
+
+        ul, li {
+            list-style-type: none;
+        }
+
+        ul {
+            padding: 0;
+        }
+
+        .cal {
+            width: 500px;
+            position: relative;
+            margin: 50px auto;
+            text-align: center;
             border: 1px solid #000;
         }
-        .cal h3{
+
+        .cal h3 {
             margin-top: 50px;
             font-size: 30px;
         }
-        .cal .week{
+
+        .cal .pre-mon, .cal .nex-mon {
+            top: 60px;
+            position: absolute;
+            text-decoration: none;
+        }
+
+        .cal .pre-mon {
+            left: 15px;
+        }
+
+        .cal .nex-mon {
+            right: 15px;
+        }
+
+        .cal .week {
             margin-top: 20px;
         }
-        .cal .week li{
+
+        .cal .week li, .cal .day li {
             float: left;
             width: 70px;
             height: 30px;
             text-align: center;
             line-height: 30px;
         }
-        .cal .day{
+
+        .cal .day {
             margin: 10px 0;
         }
-        .cal .day li{
+
+        .cal .day li {
             float: left;
 
         }
+
+        .cal .day li.cur {
+            background: #BF7030;
+            color: #fff;
+        }
+
+        .cal .day li.past {
+            color: #a7a7a7;
+        }
     </style>
-    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script>
-        var calendar = function(ele){
-            console.log(arguments, 'arguments');
-            var ele = $(ele);
-            if(ele.length < 1) return;
-            var numCH = ['一','二','三','四','五','六','七','八','九','十','十一','十二'],
-                days = [31,28,31,30,31,30,31,31,30,31,30,31];
-            var nDate = new Date();
+        window.onload = function () {
+            var data = new Date();
+            var month = data.getMonth() + 1;
+            calendar();
+            var preMonBtn = document.getElementsByClassName('pre-mon')[0],
+                nexMonBtn = document.getElementsByClassName('nex-mon')[0];
+            preMonBtn.addEventListener('click', function(){
+                calendar(month-=1);
+            });
+            nexMonBtn.addEventListener('click', function(){
+                calendar(month+=1);
+            })
         };
-        calendar('.cal');
+        var calendar = function (tarMon) {
+            var dayEle = document.getElementsByClassName('day')[0],
+                yearEle = document.getElementsByClassName('year')[0],
+                curDate = new Date(),
+                year = curDate.getFullYear(),
+                mon = tarMon || curDate.getMonth() + 1,
+                week = curDate.getDay(),
+                day = curDate.getDate();
+            var fmtNum = function (num) {
+                if (!num) return;
+                if (num < 10) return '0' + num;
+                return num;
+            };
+            var gTotalDay = function (mon) {
+                var dayNum = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                if (mon == 2 && (year % 4 == 0 || (year % 100 == 0 && year % 400 == 0))) {
+                    return 29;
+                }
+                return dayNum[mon - 1];
+            };
+            var setDays = function (curMon) {
+                curMon = curMon || mon;
+                var truelyMon = (new Date()).getMonth() + 1;
+                dayEle.innerHTML = '';
+                var dayWeek = (new Date(year, (curMon - 1), 1)).getDay();
+                for (var j = 1; j < dayWeek; j++) {
+                    var ele = document.createElement('li');
+                    dayEle.appendChild(ele);
+                }
+                for (var i = 0; i < gTotalDay(curMon); i++) {
+                    var ele = document.createElement('li'),
+                        curD = (1 + i);
+                    ele.innerText = (1 + i);
+                    if(curMon == truelyMon){
+                        (curD == day) && (ele.classList.add('cur'));
+                        (curD < day) && (ele.classList.add('past'));
+                    }
+                    dayEle.appendChild(ele);
+                }
+            };
+            var setYearMon = function () {
+                yearEle.innerText = (year + '年' + fmtNum(mon) + '月');
+            };
+
+            setYearMon();
+            setDays();
+        }
     </script>
 </head>
 <body>
-    <div class="cal">
-        <h3></h3>
-        <ul class="week"></ul>
-        <ul class="day"></ul>
-    </div>
+<div class="cal">
+    <h3 class="year"></h3>
+    <a href="javascript:;" class="pre-mon">上月</a>
+    <a href="javascript:;" class="nex-mon">下月</a>
+    <ul class="week clear">
+        <li>一</li>
+        <li>二</li>
+        <li>三</li>
+        <li>四</li>
+        <li>五</li>
+        <li>六</li>
+        <li>日</li>
+    </ul>
+    <ul class="day clear">
+
+    </ul>
+</div>
 </body>
 </html>
