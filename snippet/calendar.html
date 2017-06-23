@@ -79,23 +79,24 @@
     <script>
         window.onload = function () {
             var data = new Date();
-            var month = data.getMonth() + 1;
+            var month = data.getMonth();
             calendar();
             var preMonBtn = document.getElementsByClassName('pre-mon')[0],
                 nexMonBtn = document.getElementsByClassName('nex-mon')[0];
             preMonBtn.addEventListener('click', function(){
-                calendar(month-=1);
+                calendar(--month);
             });
             nexMonBtn.addEventListener('click', function(){
-                calendar(month+=1);
+                calendar(++month);
             })
         };
         var calendar = function (tarMon) {
             var dayEle = document.getElementsByClassName('day')[0],
                 yearEle = document.getElementsByClassName('year')[0],
-                curDate = new Date(),
-                year = curDate.getFullYear(),
-                mon = tarMon || curDate.getMonth() + 1,
+                curDate = new Date();
+            (tarMon != null) && (curDate.setMonth(tarMon, 1));
+            var year = curDate.getFullYear(),
+                mon = curDate.getMonth() + 1,
                 week = curDate.getDay(),
                 day = curDate.getDate();
             var fmtNum = function (num) {
