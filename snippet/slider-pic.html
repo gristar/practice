@@ -1,0 +1,154 @@
+<style>
+    ul,li{
+        padding: 0;
+        margin: 0;
+    }
+    li{
+        list-style: none;
+    }
+    .container{
+        width: 800px;
+        height: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        overflow: hidden;
+    }
+    .banner{
+        position: relative;
+        overflow: hidden;
+    }
+    .banner li{
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .banner li img{
+        width: 800px;
+        height: 400px;
+    }
+    .btn{
+        height: 30px;
+        position: absolute;
+        left: 0;
+        display: none;
+    }
+    .btn>.prev,.btn>.next{
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        font-size: 14px;
+        color: #fff;
+        background: rgba(188,185,185,0.50);
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .btn .prev:hover,.btn .next:hover{
+        background: rgba(188,185,185,0.80);
+    }
+    .btn>.prev{
+        float: left;
+    }
+    .btn>.next{
+        float: right;
+    }
+    .box{
+        height: 10px;
+        position: absolute;
+        bottom: 30px;
+        overflow: hidden;
+    }
+    .box li{
+        width: 50px;
+        height: 10px;
+        background: rgba(188,185,185,0.50);
+        float: left;
+        cursor: pointer;
+    }
+    .box li.active {
+        background: #00FA9A !important;
+    }
+    .box li:hover{
+        background: #00FA9A !important;
+    }
+</style>
+<div class="container">
+    <ul class="banner">
+        <li><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1499241259&di=2ff02fbccfaf02ec79dc4b304444e6ad&imgtype=jpg&er=1&src=http%3A%2F%2Fdl.bizhi.sogou.com%2Fimages%2F2013%2F09%2F29%2F391672.jpg" ></li>
+        <li><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1498646608817&di=5555cbf15efd661a65578440897827b3&imgtype=0&src=http%3A%2F%2Fpic15.photophoto.cn%2F20100615%2F0006019058815826_b.jpg" ></li>
+        <li><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1498646647211&di=3514a6cc7bad445901c50b1056498b9f&imgtype=0&src=http%3A%2F%2Fp3.image.hiapk.com%2Fuploads%2Fallimg%2F140814%2F7730-140Q41I921.jpg" ></li>
+        <li><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1498646677725&di=2757bfb1e0b6a7e30086942808bc01db&imgtype=0&src=http%3A%2F%2Fwww.pp3.cn%2Fuploads%2F201409%2F2014091305.jpg" ></li>
+    </ul>
+    <div class="btn">
+        <div class="prev">&lt;</div>
+        <div class="next">&gt;</div>
+    </div>
+    <ul class="box"></ul>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script>
+$(function(){
+    var w = $('.container').width(),
+        h = $('.container').height(),
+        btnT = (h / 2) - 30/2,
+        boxW = w / 3,
+        picNum = $('.banner li img').length,
+        boxLiMrg = (boxW - 50*picNum) / picNum,
+        curPicN = 0,
+        autoAct = null,
+        actInteval = 3000;
+
+    $('.btn').css({top:btnT,width:w*0.9,left:w*0.1/2});
+    $('.banner').css({width:w,height:h});
+    for(var i = 1; i <= picNum; i++){
+        $('.box').append($('<li>'))
+    }
+    $('.box li').eq(0).addClass('active');
+    $('.box').css('left', (w-boxW)/2);
+    $('.box li').css('margin-right', boxLiMrg);
+
+    var act = function(){
+        $('.banner li').eq(curPicN).fadeIn().siblings().fadeOut();
+        $('.box li').eq(curPicN).addClass('active').siblings().removeClass('active');
+    };
+    var nextPic = function(){
+        curPicN++;
+        if(curPicN == picNum) curPicN = 0;
+        act();
+    };
+    var prevPic = function(){
+        curPicN--;
+        if(curPicN < 0) curPicN = picNum-1;
+        act();
+    };
+    autoAct = setInterval(function(){
+        nextPic();
+    },actInteval);
+    var resetAct = function(){
+        clearInterval(autoAct);
+        autoAct = setInterval(function(){
+            nextPic();
+        },actInteval);
+    };
+    $('.box').on('click', 'li', function(){
+        var index = $(this).index();
+        curPicN = index;
+        act();
+    });
+    $('.btn .next').on('click', function(){
+        nextPic();
+        resetAct();
+    });
+    $('.btn .prev').on('click', function(){
+        prevPic();
+        resetAct();
+    });
+    $('.container').on('mouseover', function(){
+        $('.btn').stop().fadeIn();
+        resetAct();
+    }).on('mouseout', function(){
+        $('.btn').stop().fadeOut();
+    });
+})
+</script>
